@@ -26,5 +26,11 @@ public class CalculatorTest {
         int result = calculator.subtract(4, 3);
         assertEquals(1, result);
     }
+
+    @Test
+    public void testMultiplication() {
+        int result = calculator.multiply(2, 3);
+        assertEquals(6, result);
+    }
 }
  

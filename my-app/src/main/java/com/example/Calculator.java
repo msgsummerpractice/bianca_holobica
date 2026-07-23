@@ -3,7 +3,7 @@ package com.example;
 
 public class Calculator {
 
-
+    //add 2 numbers
     public int add(int a, int b) {
         return a + b;
     }
@@ -15,6 +15,5 @@ public class Calculator {
     public int multiply(int a, int b) {
         return a * b;
     }
-
 
 }
