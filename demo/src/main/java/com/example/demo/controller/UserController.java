@@ -6,10 +6,14 @@ import com.example.demo.service.UserService;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import java.util.List;
 import org.slf4j.Logger;
+
+import jakarta.validation.constraints.Min;
 
 @RestController
 @RequestMapping("/users")
@@ -23,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getUsers() {
+    public List<User> getUsers(@RequestParam @Min(value = 1, message = "minId must be >= 1") int minId) {
         logger.info("HTTP GET request received for /users");
         List<User> users = userService.getAllUsers();
         logger.info("The users were returned successfully to the client");
