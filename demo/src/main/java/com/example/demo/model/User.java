@@ -1,27 +1,45 @@
 package com.example.demo.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Entity
+@Table(name = "users")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class User {
-    private int id;
-    private String name;
 
-    public User() {
-    }
-    public User(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    public int getId() {
-        return id;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
+    @Column(name = "username", nullable = false, unique = true, length = 50)
+    private String username;
 
-    public String getName(){
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
+    @Column(name = "email", nullable = false, unique = true, length = 100)
+    private String email;
+
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Column(name = "firstname", length = 50)
+    private String firstname;
+
+    @Column(name = "lastname", length = 50)
+    private String lastname;
 }
