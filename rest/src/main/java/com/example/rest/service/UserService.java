@@ -1,7 +1,7 @@
 package com.example.rest.service;
 
 import java.util.List;
-import java.util.Map;
+import com.example.rest.UserResponse;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,40 +9,47 @@ import org.springframework.stereotype.Service;
 
 import com.example.rest.model.User;
 import com.example.rest.repository.IUserRepository;
+import com.example.rest.UserMapper;
+import com.example.rest.UserRequest;
+import com.example.rest.UpdateUserRequest;
 
 @Service
 public class UserService implements IUserService {
     private final IUserRepository userRepository;
+    private final UserMapper userMapper;
     
     @Autowired
-    public UserService(IUserRepository userRepository) {
+    public UserService(IUserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(userMapper::toResponse)
+                .toList();
     }
 
     @Override
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
+    public Optional<UserResponse> getUserById(Long id) {
+        return userRepository.findById(id)
+                .map(userMapper::toResponse);
     }
 
     @Override
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public UserResponse createUser(UserRequest request) {
+        User user = userMapper.toEntity(request);
+        User savedUser = userRepository.save(user);
+        return userMapper.toResponse(savedUser);
     }
 
     @Override
-    public Optional<User> updateUser(Long id, User userDetails) {
+    public Optional<UserResponse> updateUser(Long id, UpdateUserRequest request) {
         return userRepository.findById(id).map(existingUser -> {
-            existingUser.setUsername(userDetails.getUsername());
-            existingUser.setEmail(userDetails.getEmail());
-            existingUser.setPassword(userDetails.getPassword());
-            existingUser.setFirstname(userDetails.getFirstname());
-            existingUser.setLastname(userDetails.getLastname());
-            return userRepository.save(existingUser);
+            userMapper.updateEntityFromDto(request, existingUser, false);
+            User updatedUser = userRepository.save(existingUser);
+            return userMapper.toResponse(updatedUser);
         });
     }
 
@@ -56,24 +63,11 @@ public class UserService implements IUserService {
     }
 
    @Override
-    public Optional<User> patchUser(Long id, Map<String, Object> updates) {
+    public Optional<UserResponse> patchUser(Long id, UpdateUserRequest request) {
         return userRepository.findById(id).map(existingUser -> {
-            if (updates.containsKey("username")) {
-                existingUser.setUsername((String) updates.get("username"));
-            }
-            if (updates.containsKey("email")) {
-                existingUser.setEmail((String) updates.get("email"));
-            }
-            if (updates.containsKey("password")) {
-                existingUser.setPassword((String) updates.get("password"));
-            }
-            if (updates.containsKey("firstname")) {
-                existingUser.setFirstname((String) updates.get("firstname"));
-            }
-            if (updates.containsKey("lastname")) {
-                existingUser.setLastname((String) updates.get("lastname"));
-            }
-            return userRepository.save(existingUser);
+            userMapper.updateEntityFromDto(request, existingUser, true); // true -> actualizare parțială
+            User updatedUser = userRepository.save(existingUser);
+            return userMapper.toResponse(updatedUser);
         });
     }
 }

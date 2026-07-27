@@ -1,15 +1,15 @@
 package com.example.rest.service;
-import com.example.rest.model.User;
+import com.example.rest.UserRequest;
+import com.example.rest.UserResponse;
+import com.example.rest.UpdateUserRequest;
 import java.util.List;
 import java.util.Optional;
-import java.util.Map;
-
 
 public interface IUserService {
-    List<User> getAllUsers();
-    Optional<User> getUserById(Long id);
-    User createUser(User user);
-    Optional<User> updateUser(Long id, User userDetails);
+    List<UserResponse> getAllUsers();
+    Optional<UserResponse> getUserById(Long id);
+    UserResponse createUser(UserRequest request);
+    Optional<UserResponse> updateUser(Long id, UpdateUserRequest request);
     boolean deleteUser(Long id);
-    Optional<User> patchUser(Long id, Map<String, Object> updates);
+    Optional<UserResponse> patchUser(Long id, UpdateUserRequest request);
 }
