@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.service;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -14,26 +14,23 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.example.demo.repository.UserRepository;
-import com.example.demo.service.UserServiceImplementation;
+import com.example.demo.repository.IUserRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
+
     @Mock
-    private UserRepository userRepository;
+    private IUserRepository userRepository;
 
     @InjectMocks
-    private UserServiceImplementation userService;
+    private UserService userService;
 
     @Test
     @DisplayName("Test getAllUsers returns a list of users")
-    public void testGetAllUsers() {
-        List<User> mockUsers = List.of(
-                new User(1, "John Doe"),
-                new User(2, "Jane Smith")
-        );
+    void getAllUsers_returnsListOfUsers_whenRepositoryReturnsUsers() {
+        List<User> mockUsers = createMockUsers();
         when(userRepository.findAll()).thenReturn(mockUsers);
 
         List<User> result = userService.getAllUsers();
@@ -45,7 +42,11 @@ public class UserServiceTest {
 
         verify(userRepository, times(1)).findAll();
     }
-        
 
-    
+    private List<User> createMockUsers() {
+        return List.of(
+            new User(1, "John Doe"),
+            new User(2, "Jane Smith")
+        );
+    }
 }

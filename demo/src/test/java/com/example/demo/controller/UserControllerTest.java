@@ -1,8 +1,8 @@
-package com.example.demo;
+package com.example.demo.controller;
 
-import com.example.demo.controller.UserController;
+import com.example.demo.AppSettings;
 import com.example.demo.model.User;
-import com.example.demo.service.UserService;
+import com.example.demo.service.IUserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -23,14 +23,14 @@ class UserControllerTest {
     private MockMvc mockMvc; 
 
     @MockitoBean
-    private UserService userService; 
+    private IUserService userService; 
+
+    @MockitoBean
+    private AppSettings appSettings;
 
     @Test
-    void testGetUsersEndpoint() throws Exception {
-        List<User> mockUsers = List.of(
-                new User(1, "John Doe"),
-                new User(2, "Jane Smith")
-        );
+    void getUsers_returnsUserList_whenUsersReturnedByService() throws Exception {
+        List<User> mockUsers = createMockUsers();
         when(userService.getAllUsers()).thenReturn(mockUsers);
 
         mockMvc.perform(get("/users").param("minId", "1"))
@@ -44,8 +44,15 @@ class UserControllerTest {
     }
 
     @Test
-    void testGetUsers_InvalidMinId_ReturnsBadRequest() throws Exception {
+    void getUsers_returnsBadRequest_whenMinIdIsInvalid() throws Exception {
         mockMvc.perform(get("/users").param("minId", "0"))
             .andExpect(status().isBadRequest());
+    }
+
+    private List<User> createMockUsers() {
+        return List.of(
+            new User(1, "John Doe"),
+            new User(2, "Jane Smith")
+        );
     }
 }
