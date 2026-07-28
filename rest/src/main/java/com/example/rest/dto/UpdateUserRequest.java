@@ -1,4 +1,4 @@
-package com.example.rest;
+package com.example.rest.dto;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
