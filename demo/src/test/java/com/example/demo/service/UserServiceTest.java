@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -88,7 +87,7 @@ public class UserServiceTest {
         User updateDetails = createSampleUser(null, "newName", "new@example.com");
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(existingUser));
-        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(userRepository.save(existingUser)).thenAnswer(invocation -> invocation.getArgument(0));
 
         User updated = userService.updateUser(1L, updateDetails);
 
