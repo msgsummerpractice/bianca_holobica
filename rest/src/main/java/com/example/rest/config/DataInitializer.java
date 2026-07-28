@@ -45,7 +45,6 @@ public class DataInitializer implements CommandLineRunner {
             user.setFirstname("Regular");
             user.setLastname("User");
             user.setRoles(Set.of(userRole));
-            userRepository.save(user);
         }
     }
 }

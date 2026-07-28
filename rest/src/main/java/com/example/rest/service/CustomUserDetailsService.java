@@ -1,4 +1,4 @@
-package com.example.rest.security;
+package com.example.rest.service;
 
 import com.example.rest.model.User;
 
@@ -24,7 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Utilizatorul nu a fost găsit: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("User was not found: " + username));
 
         var authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
