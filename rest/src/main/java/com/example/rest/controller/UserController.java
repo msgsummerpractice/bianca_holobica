@@ -5,6 +5,8 @@ import com.example.rest.UserRequest;
 import com.example.rest.UserResponse;
 import com.example.rest.service.UserService;
 import jakarta.validation.Valid;
+
+import org.springframework.http.MediaType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,26 +23,31 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<com.example.rest.UserResponse>> getAllUsers() {
-        List<com.example.rest.UserResponse> users = userService.getAllUsers();
+
+    @GetMapping(produces = {
+    MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
+        List<UserResponse> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<com.example.rest.UserResponse> getUserById(@PathVariable Long id) {
+    @GetMapping(value = "/{id}", produces = {
+    MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
         return userService.getUserById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<com.example.rest.UserResponse> createUser(@Valid @RequestBody UserRequest request) {
+    @PostMapping(produces = {
+    MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest request) {
         UserResponse createdUser = userService.createUser(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", produces = {
+    MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserRequest request) {
         return userService.updateUser(id, request)
                 .map(ResponseEntity::ok)
@@ -55,8 +62,9 @@ public class UserController {
         }
         return ResponseEntity.notFound().build();
     }
-    @PatchMapping("/{id}")
-    public ResponseEntity<com.example.rest.UserResponse> patchUser(@PathVariable Long id, @Valid @RequestBody UpdateUserRequest request) {
+    @PatchMapping(value = "/{id}", produces = {
+    MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<UserResponse> patchUser(@PathVariable Long id, @Valid @RequestBody UpdateUserRequest request) {
         return userService.patchUser(id, request)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
