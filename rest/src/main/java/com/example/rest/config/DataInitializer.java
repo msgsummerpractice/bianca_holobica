@@ -4,6 +4,8 @@ import com.example.rest.model.Role;
 import com.example.rest.model.User;
 import com.example.rest.repository.IRoleRepository;
 import com.example.rest.repository.IUserRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -17,6 +19,7 @@ public class DataInitializer implements CommandLineRunner {
     private final IRoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Autowired
     public DataInitializer(IUserRepository userRepository, IRoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;

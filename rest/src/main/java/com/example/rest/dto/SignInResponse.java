@@ -11,7 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 public class SignInResponse {
     private String token;
-    private String type = "Bearer";
     private String username;
     private List<String> roles;
     private boolean mfaRequired;
