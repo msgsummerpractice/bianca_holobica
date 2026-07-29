@@ -1,4 +1,4 @@
-package com.example.rest;
+package com.example.rest.dto;
 
 import org.springframework.stereotype.Component;
 

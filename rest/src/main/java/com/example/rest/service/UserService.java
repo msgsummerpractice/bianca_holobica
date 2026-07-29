@@ -1,17 +1,20 @@
 package com.example.rest.service;
 
 import java.util.List;
-import com.example.rest.UserResponse;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.example.rest.dto.UpdateUserRequest;
+import com.example.rest.dto.UserMapper;
+import com.example.rest.dto.UserRequest;
+import com.example.rest.dto.UserResponse;
 import com.example.rest.model.User;
 import com.example.rest.repository.IUserRepository;
-import com.example.rest.UserMapper;
-import com.example.rest.UserRequest;
-import com.example.rest.UpdateUserRequest;
 
 @Service
 public class UserService implements IUserService {
@@ -69,5 +72,11 @@ public class UserService implements IUserService {
             User updatedUser = userRepository.save(existingUser);
             return userMapper.toResponse(updatedUser);
         });
+    }
+
+    @Override
+    public Page<UserResponse> getUsers(int page, int size, String sortBy) {
+        return userRepository.findAll(PageRequest.of(page, size, Sort.by(sortBy)))
+                .map(userMapper::toResponse);
     }
 }
