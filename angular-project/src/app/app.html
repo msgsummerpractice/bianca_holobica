@@ -14,11 +14,9 @@
       <span class="font-bold text-lg md:text-xl tracking-wide">Dog Gallery</span>
     </div>
 
-    <!-- Meniul Desktop -->
     <nav class="hidden md:flex items-center gap-2">
       <a mat-button routerLink="/home" routerLinkActive="bg-pink-700">Home</a>
 
-      <!-- Vizibil DOAR dacă utilizatorul e logat -->
       <a
         mat-button
         routerLink="/breeds"
@@ -36,7 +34,6 @@
         <mat-icon>notifications</mat-icon>
       </button>
 
-      <!-- Buton Sign In: apare DOAR dacă utilizatorul NU este logat -->
       <a
         mat-button
         routerLink="/login"
@@ -48,7 +45,6 @@
         Sign In
       </a>
 
-      <!-- Buton Sign Out: apare DOAR dacă utilizatorul ESTE logat -->
       <button
         mat-button
         (click)="authService.logout()"
@@ -62,20 +58,31 @@
   </div>
 </mat-toolbar>
 
-<!-- Meniul Mobil -->
 <mat-menu #mobileMenu="matMenu">
   <a mat-menu-item routerLink="/home">
     <mat-icon>home</mat-icon>
     <span>Home</span>
   </a>
+
   <a mat-menu-item routerLink="/breeds" *ifAuth="authService.isAuthenticated()">
     <mat-icon>pets</mat-icon>
     <span>Breeds</span>
   </a>
+
   <a mat-menu-item routerLink="/about">
     <mat-icon>info</mat-icon>
     <span>About</span>
   </a>
+
+  <a mat-menu-item routerLink="/login" *ifAuth="!authService.isAuthenticated()">
+    <mat-icon>account_circle</mat-icon>
+    <span>Sign In</span>
+  </a>
+
+  <button mat-menu-item (click)="authService.logout()" *ifAuth="authService.isAuthenticated()">
+    <mat-icon>logout</mat-icon>
+    <span>Sign Out</span>
+  </button>
 </mat-menu>
 
 <main>

@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { AuthService } from './auth.service';
 import { IfAuthDirective } from './if-auth.directive';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,7 @@ import { IfAuthDirective } from './if-auth.directive';
     RouterLink,
     RouterLinkActive,
     IfAuthDirective,
+    MatDividerModule,
   ],
   templateUrl: './app.html',
 })
