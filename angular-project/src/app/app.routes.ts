@@ -4,11 +4,12 @@ import { NotFoundComponent } from './not-found.component';
 import { HomeComponent } from './home.component';
 import { BreedsComponent } from './breeds.component';
 import { AboutComponent } from './about.component';
+import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
-  { path: 'breeds', component: BreedsComponent },
+  { path: 'breeds', component: BreedsComponent, canActivate: [authGuard] },
   { path: 'about', component: AboutComponent },
   { path: 'login', loadComponent: () => import('./login.component').then((m) => m.LoginComponent) },
   { path: '404', component: NotFoundComponent },
