@@ -1,42 +1,68 @@
-import { Component } from '@angular/core';
-import { AuthService } from './auth.service';
-import { inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+  NonNullableFormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from './auth.service';
+
+// Angular Material Imports
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+
+type LoginForm = {
+  email: FormControl<string>;
+  password: FormControl<string>;
+};
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [MatButtonModule, MatIconModule],
-  template: `<div class="min-h-screen flex items-center justify-center bg-gray-100 p-4 pt-[96px]">
-    <div class="max-w-md w-full bg-white rounded-lg shadow-md p-6 text-center">
-      <h2 class="text-2xl font-bold text-gray-800 mb-4">Authenticate</h2>
-
-      @if (authService.isAuthenticated()) {
-        <p class="text-green-600 font-medium mb-4">You are successfully authenticated!</p>
-        <button mat-raised-button color="warn" (click)="logout()">
-          <mat-icon class="mr-1">logout</mat-icon> Logout
-        </button>
-      } @else {
-        <p class="text-gray-600 mb-6">Click the button below to authenticate MOCK.</p>
-        <button mat-raised-button color="primary" (click)="login()">
-          <mat-icon class="mr-1">login</mat-icon> Login
-        </button>
-      }
-    </div>
-  </div>`,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+  ],
+  templateUrl: './login.component.html',
 })
 export class LoginComponent {
-  authService = inject(AuthService);
-  router = inject(Router);
+  private readonly _fb = inject(NonNullableFormBuilder);
+  private readonly _authService = inject(AuthService);
+  private readonly _router = inject(Router);
 
-  login(): void {
-    this.authService.login();
-    this.router.navigate(['/breeds']);
+  hidePassword = true;
+
+  protected readonly loginForm: FormGroup<LoginForm> = this._fb.group<LoginForm>({
+    email: this._fb.control('', [Validators.required, Validators.email]),
+    password: this._fb.control('', [Validators.required, Validators.minLength(6)]),
+  });
+
+  protected get authService(): AuthService {
+    return this._authService;
   }
 
-  logout(): void {
-    this.authService.logout();
+  onSubmit(): void {
+    if (this.loginForm.valid) {
+      const credentials = this.loginForm.getRawValue();
+      console.log('Login credentials submitted:', credentials);
+
+      this._authService.login();
+      this._router.navigate(['/breeds']);
+    }
+  }
+
+  onLogout(): void {
+    this._authService.logout();
   }
 }

@@ -1,4 +1,4 @@
-import { Directive, effect, input, inject, ViewContainerRef } from '@angular/core';
+import { Directive, effect, input, inject, ViewContainerRef, TemplateRef } from '@angular/core';
 
 @Directive({
   selector: '[ifAuth]',
@@ -6,7 +6,7 @@ import { Directive, effect, input, inject, ViewContainerRef } from '@angular/cor
 })
 export class IfAuthDirective {
   private readonly _viewContainerRef = inject(ViewContainerRef);
-  private readonly _templateRef = this._viewContainerRef.element.nativeElement;
+  private readonly _templateRef = inject(TemplateRef);
 
   ifAuth = input<boolean>(true);
 

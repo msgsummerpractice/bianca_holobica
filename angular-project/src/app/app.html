@@ -14,9 +14,20 @@
       <span class="font-bold text-lg md:text-xl tracking-wide">Dog Gallery</span>
     </div>
 
+    <!-- Meniul Desktop -->
     <nav class="hidden md:flex items-center gap-2">
       <a mat-button routerLink="/home" routerLinkActive="bg-pink-700">Home</a>
-      <a mat-button routerLink="/breeds" routerLinkActive="bg-pink-700">Breeds</a>
+
+      <!-- Vizibil DOAR dacă utilizatorul e logat -->
+      <a
+        mat-button
+        routerLink="/breeds"
+        routerLinkActive="bg-pink-700"
+        *ifAuth="authService.isAuthenticated()"
+      >
+        Breeds
+      </a>
+
       <a mat-button routerLink="/about" routerLinkActive="bg-pink-700">About</a>
     </nav>
 
@@ -25,35 +36,39 @@
         <mat-icon>notifications</mat-icon>
       </button>
 
+      <!-- Buton Sign In: apare DOAR dacă utilizatorul NU este logat -->
       <a
         mat-button
         routerLink="/login"
         routerLinkActive="bg-pink-700"
         class="!hidden md:!inline-flex"
+        *ifAuth="!authService.isAuthenticated()"
       >
         <mat-icon class="mr-1">account_circle</mat-icon>
         Sign In
       </a>
 
-      <a
-        mat-icon-button
-        routerLink="/login"
-        routerLinkActive="bg-pink-700"
-        class="md:!hidden"
-        aria-label="Sign In"
+      <!-- Buton Sign Out: apare DOAR dacă utilizatorul ESTE logat -->
+      <button
+        mat-button
+        (click)="authService.logout()"
+        class="!hidden md:!inline-flex"
+        *ifAuth="authService.isAuthenticated()"
       >
-        <mat-icon>account_circle</mat-icon>
-      </a>
+        <mat-icon class="mr-1">logout</mat-icon>
+        Sign Out
+      </button>
     </div>
   </div>
 </mat-toolbar>
 
+<!-- Meniul Mobil -->
 <mat-menu #mobileMenu="matMenu">
   <a mat-menu-item routerLink="/home">
     <mat-icon>home</mat-icon>
     <span>Home</span>
   </a>
-  <a mat-menu-item routerLink="/breeds">
+  <a mat-menu-item routerLink="/breeds" *ifAuth="authService.isAuthenticated()">
     <mat-icon>pets</mat-icon>
     <span>Breeds</span>
   </a>
