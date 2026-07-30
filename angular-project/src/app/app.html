@@ -1,0 +1,83 @@
+<mat-toolbar color="primary" class="fixed top-0 left-0 right-0 z-50 shadow-md">
+  <div class="flex items-center justify-between w-full max-w-7xl mx-auto px-2 md:px-4">
+    <div class="flex items-center gap-2">
+      <button
+        mat-icon-button
+        class="md:!hidden"
+        [matMenuTriggerFor]="mobileMenu"
+        aria-label="Navigation menu"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <mat-icon class="hidden sm:inline-block">pets</mat-icon>
+      <span class="font-bold text-lg md:text-xl tracking-wide">Dog Gallery</span>
+    </div>
+
+    <nav class="hidden md:flex items-center gap-2">
+      <a mat-button href="#">Home</a>
+      <a mat-button href="#">Breeds</a>
+      <a mat-button href="#">About</a>
+    </nav>
+
+    <div class="flex items-center gap-1 md:gap-2">
+      <button mat-icon-button aria-label="Notifications">
+        <mat-icon>notifications</mat-icon>
+      </button>
+
+      <button mat-button class="!hidden md:!inline-flex">
+        <mat-icon class="mr-1">account_circle</mat-icon>
+        Sign In
+      </button>
+
+      <button mat-icon-button class="md:!hidden" aria-label="Sign In">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+    </div>
+  </div>
+</mat-toolbar>
+
+<mat-menu #mobileMenu="matMenu">
+  <a mat-menu-item href="#">
+    <mat-icon>home</mat-icon>
+    <span>Home</span>
+  </a>
+  <a mat-menu-item href="#">
+    <mat-icon>pets</mat-icon>
+    <span>Breeds</span>
+  </a>
+  <a mat-menu-item href="#">
+    <mat-icon>info</mat-icon>
+    <span>About</span>
+  </a>
+</mat-menu>
+
+<div class="min-h-screen bg-pink-50 px-6 pb-6 md:px-12 md:pb-12 pt-[80px] md:pt-[96px]">
+  <header class="mb-8 text-center max-w-2xl mx-auto">
+    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Dog Gallery</h1>
+    <p class="text-gray-600 text-sm md:text-base">Explore a variety of dog breeds</p>
+  </header>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <h2 class="text-xl font-semibold text-gray-800 mb-2">Golden Retriever</h2>
+      <p class="text-gray-600 text-sm leading-relaxed">
+        Intelligent, friendly, and devoted. Great family dogs known for their gentle nature.
+      </p>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <h2 class="text-xl font-semibold text-gray-800 mb-2">German Shepherd</h2>
+      <p class="text-gray-600 text-sm leading-relaxed">
+        Confident, courageous, and smart. Highly adaptable and excellent working dogs.
+      </p>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <h2 class="text-xl font-semibold text-gray-800 mb-2">French Bulldog</h2>
+      <p class="text-gray-600 text-sm leading-relaxed">
+        Playful, adaptable, and smart. Compact size with a distinctive bat-eared look.
+      </p>
+    </div>
+  </div>
+</div>
