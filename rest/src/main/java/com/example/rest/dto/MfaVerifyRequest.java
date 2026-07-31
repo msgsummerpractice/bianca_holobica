@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class MfaVerifyRequest {
     @NotBlank
-    private String username;
+    private String email;
 
     @NotBlank
     private String code;

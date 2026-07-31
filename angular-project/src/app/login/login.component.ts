@@ -8,9 +8,8 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 
-// Angular Material Imports
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -42,6 +41,10 @@ export class LoginComponent {
   private readonly _router = inject(Router);
 
   hidePassword = true;
+  step: 'LOGIN' | 'MFA' = 'LOGIN';
+  mfaCodeControl = new FormControl('', [Validators.required]);
+  userEmail = '';
+  errorMessage = '';
 
   protected readonly loginForm: FormGroup<LoginForm> = this._fb.group<LoginForm>({
     email: this._fb.control('', [Validators.required, Validators.email]),
@@ -54,11 +57,36 @@ export class LoginComponent {
 
   onSubmit(): void {
     if (this.loginForm.valid) {
+      this.errorMessage = '';
       const credentials = this.loginForm.getRawValue();
-      console.log('Login credentials submitted:', credentials);
 
-      this._authService.login();
-      this._router.navigate(['/breeds']);
+      this._authService.login(credentials).subscribe({
+        next: (res) => {
+          this.userEmail = res.email;
+          this.step = 'MFA';
+        },
+        error: (err) => {
+          this.errorMessage = 'Email or password is incorrect!';
+        },
+      });
+    }
+  }
+
+  onVerifyMfa(): void {
+    if (this.mfaCodeControl.valid && this.mfaCodeControl.value) {
+      this.errorMessage = '';
+
+      this._authService
+        .verifyMfa({ email: this.userEmail, code: this.mfaCodeControl.value })
+        .subscribe({
+          next: (res) => {
+            this._authService.saveToken(res.token);
+            this._router.navigate(['/breeds']);
+          },
+          error: (err) => {
+            this.errorMessage = 'The MFA code is invalid or has expired!';
+          },
+        });
     }
   }
 

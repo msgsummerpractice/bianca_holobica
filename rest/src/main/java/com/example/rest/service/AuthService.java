@@ -48,26 +48,27 @@ public class AuthService implements IAuthService {
     @Override
     public String authenticateUser(SignInRequest signInRequest) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(signInRequest.getUsername(), signInRequest.getPassword())
+                new UsernamePasswordAuthenticationToken(signInRequest.getEmail(), signInRequest.getPassword())
         );
 
         String otpCode = String.format("%06d", new Random().nextInt(900000) + 100000);
-        mfaCodeStore.put(signInRequest.getUsername(), otpCode);
+        mfaCodeStore.put(signInRequest.getEmail(), otpCode);
 
+        System.out.println(" MFA CODE " + signInRequest.getEmail() + ": " + otpCode);
         return otpCode;
     }
 
     @Override
     public SignInResponse verifyMfaAndGenerateToken(MfaVerifyRequest verifyRequest) {
-        String storedCode = mfaCodeStore.get(verifyRequest.getUsername());
+        String storedCode = mfaCodeStore.get(verifyRequest.getEmail());
 
         if (storedCode == null || !storedCode.equals(verifyRequest.getCode())) {
             throw new RuntimeException("MFA code is invalid or has expired!");
         }
 
-        mfaCodeStore.remove(verifyRequest.getUsername());
+        mfaCodeStore.remove(verifyRequest.getEmail());
 
-        User user = userRepository.findByUsername(verifyRequest.getUsername())
+        User user = userRepository.findByEmail(verifyRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException("User does not exist"));
 
         var authorities = user.getRoles().stream()
@@ -75,20 +76,20 @@ public class AuthService implements IAuthService {
                 .toList();
 
         UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUsername())
+                .username(user.getEmail())
                 .password(user.getPassword())
                 .roles()
                 .build();
 
         String jwtToken = jwtUtils.generateJwtToken(userDetails);
 
-        return new SignInResponse(jwtToken, user.getUsername(), authorities);
+        return new SignInResponse(jwtToken, user.getEmail(), authorities);
     }
 
     @Override
     public String registerUser(RegisterRequest registerRequest) {
-        if (userRepository.findByUsername(registerRequest.getUsername()).isPresent()) {
-            throw new RuntimeException("Username is already taken!");
+        if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
+            throw new RuntimeException("Email is already taken!");
         }
 
         User user = new User();

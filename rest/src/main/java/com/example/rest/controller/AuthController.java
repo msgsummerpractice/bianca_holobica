@@ -27,7 +27,7 @@ public class AuthController {
         return ResponseEntity.ok(Map.of(
                 "message", "First step successful. MFA code has been generated.",
                 "mfaCode", mfaCode,
-                "username", signInRequest.getUsername()
+                "email", signInRequest.getEmail()
         ));
     }
 
