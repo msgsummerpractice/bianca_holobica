@@ -43,7 +43,7 @@ jobs:
 
           skip_app_build: true
 
-          app_location: "angular-project/dist/angular-project"
+          app_location: "angular-project/dist/angular-project/browser"
           output_location: ""
           api_location: ""
 
