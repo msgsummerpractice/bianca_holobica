@@ -16,5 +16,5 @@ export const routes: Routes = [
     loadComponent: () => import('./login/login.component').then((m) => m.LoginComponent),
   },
   { path: '404', component: NotFoundComponent },
-  { path: '**', component: NotFoundComponent },
+  { path: '**', redirectTo: 'home', pathMatch: 'full' },
 ];
