@@ -1,0 +1,20 @@
+{
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/images/*", "/css/*", "/js/*"]
+  },
+  "routes": [
+    {
+      "route": "/admin/*",
+      "allowedRoles": ["authenticated"]
+    },
+    {
+      "route": "/old-page",
+      "redirect": "/new-page",
+      "statusCode": 301
+    }
+  ],
+  "navigationFallback": {
+    "rewrite": "/index.html"
+  }
+}
