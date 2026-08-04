@@ -3,7 +3,9 @@ import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
-import { JwtPayload, SignInResponse, User } from '../models/user.model';
+import { User } from '../models/user.model';
+import { SignInResponse } from '../models/signInResponse.model';
+import { JwtPayload } from '../models/jwtPayload.model';
 
 @Injectable({
   providedIn: 'root',
