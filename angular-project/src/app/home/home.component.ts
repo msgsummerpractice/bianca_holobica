@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { DogService } from '../dog.service';
+import { DogService } from '../services/dog.service';
 
 @Component({
   selector: 'app-home',

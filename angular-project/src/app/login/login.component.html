@@ -11,6 +11,8 @@
       <mat-card-subtitle class="text-slate-500 mt-1">
         @if (authService.isAuthenticated()) {
           You are already logged in. You can log out if you want to switch accounts.
+        } @else if (step === 'MFA') {
+          Insert the MFA code sent to email: <b>{{ userEmail }}</b>
         } @else {
           Insert your email and password to log in and access the breed gallery.
         }
@@ -18,6 +20,14 @@
     </mat-card-header>
 
     <mat-card-content>
+      @if (errorMessage) {
+        <div
+          class="p-3 mb-4 bg-red-50 text-red-700 rounded-lg text-sm text-center font-medium border border-red-200"
+        >
+          {{ errorMessage }}
+        </div>
+      }
+
       @if (authService.isAuthenticated()) {
         <div class="flex flex-col items-center gap-4 py-4">
           <div
@@ -29,10 +39,10 @@
             <mat-icon class="mr-1">logout</mat-icon> Logout
           </button>
         </div>
-      } @else {
+      } @else if (step === 'LOGIN') {
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
           <mat-form-field appearance="outline" class="w-full">
-            <mat-label>E-mail Adress</mat-label>
+            <mat-label>E-mail Address</mat-label>
             <input matInput type="email" formControlName="email" placeholder="nume@exemplu.com" />
             <mat-icon matPrefix class="mr-2 text-slate-400">email</mat-icon>
 
@@ -55,14 +65,7 @@
             />
             <mat-icon matPrefix class="mr-2 text-slate-400">lock</mat-icon>
 
-            <button
-              mat-icon-button
-              matSuffix
-              type="button"
-              (click)="hidePassword = !hidePassword"
-              [attr.aria-label]="'Hide password'"
-              [attr.aria-pressed]="hidePassword"
-            >
+            <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
               <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
             </button>
 
@@ -72,24 +75,38 @@
             ) {
               <mat-error>Password is required.</mat-error>
             }
-            @if (
-              loginForm.controls.password.hasError('minlength') &&
-              loginForm.controls.password.touched
-            ) {
-              <mat-error>Password must be at least 6 characters long.</mat-error>
-            }
           </mat-form-field>
 
           <button
             mat-raised-button
             color="primary"
             type="submit"
-            class="w-full py-2 text-base font-semibold transition-all mt-2"
+            class="w-full py-2 text-base font-semibold mt-2"
             [disabled]="loginForm.invalid"
           >
             Sign In
           </button>
         </form>
+      } @else if (step === 'MFA') {
+        <div class="flex flex-col gap-4">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Cod MFA / OTP</mat-label>
+            <input matInput type="text" [formControl]="mfaCodeControl" placeholder="ex: 123456" />
+            <mat-icon matPrefix class="mr-2 text-slate-400">security</mat-icon>
+          </mat-form-field>
+
+          <button
+            mat-raised-button
+            color="primary"
+            class="w-full py-2 text-base font-semibold"
+            [disabled]="mfaCodeControl.invalid"
+            (click)="onVerifyMfa()"
+          >
+            Verify MFA Code
+          </button>
+
+          <button mat-button color="basic" (click)="step = 'LOGIN'">Back to Login</button>
+        </div>
       }
     </mat-card-content>
   </mat-card>

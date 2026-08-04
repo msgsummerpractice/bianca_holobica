@@ -11,13 +11,13 @@ import java.util.List;
 @AllArgsConstructor
 public class SignInResponse {
     private String token;
-    private String username;
+    private String email;
     private List<String> roles;
     private boolean mfaRequired;
 
-    public SignInResponse(String token, String username, List<String> roles) {
+    public SignInResponse(String token, String email, List<String> roles) {
         this.token = token;
-        this.username = username;
+        this.email = email;
         this.roles = roles;
         this.mfaRequired = false;
     }
