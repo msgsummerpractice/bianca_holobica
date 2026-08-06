@@ -13,7 +13,8 @@ import { JwtPayload } from '../models/jwtPayload.model';
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
-  private apiUrl = 'http://localhost:8080/api/auth';
+  private apiUrl =
+    'https://bianca-container-app.ashywave-ce39a15c.eastus.azurecontainerapps.io/api/auth';
 
   currentUser = signal<User | null>(null);
 
